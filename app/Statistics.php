@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Clinic;
+use App\Metric;
 use Illuminate\Database\Eloquent\Model;
 
 class Statistics extends Model
@@ -23,4 +25,25 @@ class Statistics extends Model
     protected $dates = [
         'reported_for',
     ];
+
+    /**
+     * Clinic.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function clinic()
+    {
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
+    }
+
+    /**
+     * Metric.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function metric()
+    {
+        return $this->belongsTo(Metric::class, 'metric_id', 'id');
+    }
+
 }
