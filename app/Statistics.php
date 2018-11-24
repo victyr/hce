@@ -4,6 +4,7 @@ namespace App;
 
 use App\Clinic;
 use App\Metric;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Statistics extends Model
@@ -25,6 +26,15 @@ class Statistics extends Model
     protected $dates = [
         'reported_for',
     ];
+
+    public function getReportedForAttribute($value)
+    {
+        if (is_null($value)) {
+            return $value;
+        }
+
+        return Carbon::parse($value)->format('Y-m-d');
+    }
 
     /**
      * Clinic.

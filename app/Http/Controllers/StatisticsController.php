@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Clinic;
+use App\Metric;
 use App\Statistics;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
 {
+
+    /**
+     * StatisticsController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +25,11 @@ class StatisticsController extends Controller
      */
     public function index()
     {
-        //
+        $statistics = Statistics::with(['clinic', 'metric'])->get();
+
+        return view('statistics.index', [
+            'statistics' => $statistics,
+        ]);
     }
 
     /**
@@ -24,7 +39,13 @@ class StatisticsController extends Controller
      */
     public function create()
     {
-        //
+        $clinics = Clinic::get();
+        $metrics = Metric::all()->groupBy('category');
+
+        return view('statistics.create', [
+            'clinics' => $clinics,
+            'metrics' => $metrics,
+        ]);
     }
 
     /**
@@ -35,7 +56,26 @@ class StatisticsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'clinic' => 'required|integer|exists:clinics,id',
+            'metric' => 'required|integer|exists:metrics,id',
+            'report_date' => 'required|date',
+            'total' => 'required|integer',
+        ]);
+
+        $clinic = Clinic::first();
+        $metric = Metric::first();
+
+        $stat = new Statistics();
+        // $stat->clinic()->associate($clinic);
+        $stat->clinic_id = $request->clinic;
+        // $stat->metric()->associate($metric);
+        $stat->metric_id = $request->metric;
+        $stat->reported_for = $request->report_date;
+        $stat->total = $request->total;
+        $stat->save();
+
+        return redirect()->route('statistics.index');
     }
 
     /**

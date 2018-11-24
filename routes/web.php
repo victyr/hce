@@ -18,3 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['prefix' => 'statistics', 'as' => 'statistics.'], function(){
+    Route::get('/', 'StatisticsController@index')->name('index');
+    Route::post('/', 'StatisticsController@store')->name('store');
+    Route::get('/create', 'StatisticsController@create')->name('create');
+});
