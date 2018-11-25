@@ -23,4 +23,5 @@ Route::group(['prefix' => 'statistics', 'as' => 'statistics.'], function(){
     Route::get('/', 'StatisticsController@index')->name('index');
     Route::post('/', 'StatisticsController@store')->name('store');
     Route::get('/create', 'StatisticsController@create')->name('create');
+    Route::get('/create/week', 'StatisticsController@create_by_week')->name('create.week');
 });

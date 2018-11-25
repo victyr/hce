@@ -1,17 +1,37 @@
 @extends('layouts.app')
 
+@section('extra-css')
+    <style type="text/css">
+        .card-header .title {
+            padding-top: 3px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+    </style>
+@endsection
+
+@push('extra-js')
+
+@endpush
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Statistics
+                    <div class="row">
+                        <div class="col-sm-3 title">
+                            Statistics
+                        </div>
 
-                    <div class="float-right">
-                        <a href="{{ route('statistics.create') }}">
-                            <i class="fa fa-plus"></i>&nbsp;New
-                        </a>
+                        <div class="col-sm-9">
+                            <a href="{{ route('statistics.create') }}" class="float-right">
+                                <button type="button" class="btn btn-sm btn-outline-dark">
+                                    <i class="fa fa-plus"></i> New
+                                </button>
+                            </a>
+                        </div>
                     </div>
                 </div>
 

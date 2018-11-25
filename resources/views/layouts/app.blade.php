@@ -15,6 +15,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @yield('extra-css')
 </head>
 <body>
     <div id="app">
@@ -80,13 +82,8 @@
 
 <script type="text/javascript">
     var app = '{{ config('app.url') }}';
-
-    // window.$.ajaxSetup({
-    //     headers: {
-    //         'X-Requested-With': 'XMLHttpRequest',
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     }
-    // });
 </script>
+
+@stack('extra-js')
 
 </html>
