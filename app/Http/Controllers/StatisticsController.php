@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Clinic;
 use App\Metric;
 use App\Statistics;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -55,218 +56,56 @@ class StatisticsController extends Controller
      */
     public function create_by_week()
     {
-        $metrics = Metric::all()->map(function($metric) {
-          return [
-            'id' => $metric->id,
-            'category' => $metric->category,
-            'name' => $metric->name,
-            'total' => null,
-          ];
-        });
+        // Fake last week
+        $today = Carbon::now();
 
-        $statistics = Statistics::where('clinic_id', 1)->get()->groupBy('reported_for');
+        $yesterday = $today->subDay();
 
-        $_statistics = array();
+        // Week days
+        $days = week_days($yesterday);
 
-        foreach(week_days() as $day) {
-            $_metrics = $metrics->toArray();
-
-            if(isset($statistics[$day])) {
-
-                foreach ($statistics[$day] as $metric) {
-
-                    $_metric_idx = array_search($metric->metric_id, array_column($_metrics, 'id'));
-
-                    if(is_numeric($_metric_idx)) {
-                        $_metrics[$_metric_idx]['total'] = $metric['total'];
-                    }
-
-                }
-
-            }
-
-            $_statistics[$day] = $_metrics;
+        $week = array();
+        foreach ($days as $day) {
+            $week[$day] = null;
         }
 
-        $tests = array(
-          [
-            'id' => 1,
-            'category' => 'patients',
-            'name' => 'surgeries',
-            'statistics' => [
-              '2018-11-19' => 5,
-              '2018-11-20' => null,
-              '2018-11-21' => 6,
-              '2018-11-22' => null,
-              '2018-11-23' => 15,
-              '2018-11-24' => null,
-              '2018-11-25' => 0,
-            ],
-          ],
-          [
-            'id' => 2,
-            'category' => 'staff',
-            'name' => 'doctors',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => 8,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 3,
-            'category' => 'staff',
-            'name' => 'mid-wives',
-            'statistics' => [
-              '2018-11-19' => 4,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => 8,
-              '2018-11-23' => null,
-              '2018-11-24' => 3,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 4,
-            'category' => 'staff',
-            'name' => 'others',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 5,
-            'category' => 'staff',
-            'name' => 'support',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 6,
-            'category' => 'staff-hop',
-            'name' => 'doctors',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 7,
-            'category' => 'staff-hop',
-            'name' => 'mid-wives',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 8,
-            'category' => 'staff-hop',
-            'name' => 'others',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 9,
-            'category' => 'staff-hop',
-            'name' => 'support',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 10,
-            'category' => 'prescriptions',
-            'name' => 'sku',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 11,
-            'category' => 'prescriptions',
-            'name' => 'total',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-          [
-            'id' => 12,
-            'category' => 'prescriptions',
-            'name' => 'unfilled',
-            'statistics' => [
-              '2018-11-19' => null,
-              '2018-11-20' => null,
-              '2018-11-21' => null,
-              '2018-11-22' => null,
-              '2018-11-23' => null,
-              '2018-11-24' => null,
-              '2018-11-25' => null,
-            ],
-          ],
-        );
+        // Metrics
+        $metrics = \App\Metric::all()->map(function($metric) use($week) {
+            return [
+                "id" => $metric->id,
+                "category" => $metric->category,
+                "name" => $metric->name,
+                "statistics" => $week,
+            ];
+        })->toArray();
 
-        // return response()->json($tests);
+        // Statistics
+        $stats_by_metric = \App\Statistics::where('clinic_id', 1)->get()->groupBy('metric_id');
+
+        $statistics = $stats_by_metric->map(function($metrics) {
+            $stat = [];
+            foreach ($metrics as $metric) {
+                $reported_for = $metric['reported_for'];
+                $stat[$reported_for] = $metric['total'];
+            }
+            return $stat;
+        })->toArray();
+
+        // Incorporate statistics into default metrics
+        foreach ($metrics as &$metric) {
+            if(isset($statistics[$metric['id']])) {
+                $stat = $statistics[$metric['id']];
+                foreach ($stat as $reported_for => $tally) {
+                    $metric['statistics'][$reported_for] = $tally;
+                }
+            }
+        }
 
         $clinics = Clinic::get();
 
         return view('statistics.create-week', [
             'clinics' => $clinics,
-            'metrics' => $tests,
-            // 'statistics' => $_statistics,
+            'metrics' => $metrics,
         ]);
     }
 
