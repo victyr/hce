@@ -14,20 +14,16 @@ class ClinicsTableSeeder extends Seeder
     {
         DB::table('clinics')->insert([
             [
-                'name' => 'Rushozi HC',
-                'level' => 2,
+                'name' => 'Rushozi HCII',
             ],
             [
-                'name' => 'Bugongi HC',
-                'level' => 3,
+                'name' => 'Bugongi HCIII',
             ],
             [
-                'name' => 'Kabwohe HC',
-                'level' => 4,
+                'name' => 'Kabwohe HCIV',
             ],
             [
-                'name' => 'Kitagata Hospital',
-                'level' => 5,
+                'name' => 'Kitagata Hospital'
             ],
         ]);
     }
