@@ -16,7 +16,7 @@ class CreateClinicsTable extends Migration
         Schema::create('clinics', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            //$table->smallInteger('level')->default(2);
+            $table->smallInteger('level')->default(2);
             $table->timestamps();
             $table->softDeletes();
         });
