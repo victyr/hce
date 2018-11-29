@@ -23,7 +23,7 @@ class CreateMetricsTable extends Migration
                 'staff-hop',
                 'prescriptions',
                 'diagnoses',
-                'pediatric',
+                'childhealth',
                 'opd_cycle',
                 'hiv',
                 'cme',
