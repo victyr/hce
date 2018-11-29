@@ -16,7 +16,7 @@ class Clinic extends Model
      */
     protected $fillable = [
         'name',
-        'level',
+    
     ];
 
     /**
